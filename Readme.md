@@ -1,16 +1,23 @@
-___
 # Python Web Scraping & VirusTotal API Integration
 
 這是一個 Python 實作練習專案，主要包含兩個領域的功能：
-1. **靜態網頁爬蟲**：抓取台灣水庫即時水情資料。
+1. **網頁爬蟲**：
+    - **靜態爬蟲**：抓取台灣水庫即時水情資料。
+    - **動態爬蟲**：使用 Playwright 模擬瀏覽器操作，抓取 YouTube 搜尋結果。
 2. **資訊安全 API 整合**：使用 VirusTotal API 進行 URL 與檔案安全掃描（包含「通用 HTTP 請求」與「官方非同步 SDK」兩種實作方式）。
 
 ## 📂 專案檔案說明
 
+### 網頁爬蟲
 - **`static_web.py`**: 爬取 [台灣水庫即時水情](https://water.taiwanstat.com/) 網站，解析並儲存水庫數據至 `reservoirs.json`。
+- **`dynamic_web.py`**: 使用 `Playwright` 進行動態網頁爬取練習，自動開啟瀏覽器搜尋 YouTube 關鍵字（Python），並抓取影片標題與連結。
+
+### VirusTotal API
 - **`VirusTotal_API_test.py`**: 使用 `requests` 直接呼叫 VirusTotal API v3 進行 URL 掃描，並將結果存為 `report.json`。
 - **`vt_sdk_test.py`**: 使用官方 `vt-py` SDK 與 `asyncio` 實作非同步 URL 掃描。
 - **`vt_sdk_ScanFile.py`**: 使用官方 `vt-py` SDK 上傳並掃描本地檔案（範例為 `geek.exe`），等待分析完成後回傳統計結果。
+
+### 其他
 - **`requirements.txt`**: 專案所需的 Python 套件列表。
 
 ## 🚀 環境設定與安裝
@@ -19,6 +26,13 @@ ___
 
 ```bash
 pip install -r requirements.txt
+```
+
+### ⚠️ Playwright 特別設定
+若要執行 `dynamic_web.py` (動態爬蟲)，安裝完套件後**必須**執行以下指令來下載瀏覽器驅動：
+
+```bash
+playwright install
 ```
 
 ### 設定 API Key
@@ -33,28 +47,35 @@ VIRUSTOTAL_API_KEY=你的_VirusTotal_API_Key
 
 ## 📖 使用方式
 
-### 1. 執行水庫爬蟲
+### 1. 執行水庫爬蟲 (靜態)
 抓取最新水庫蓄水量資料：
 ```bash
 python static_web.py
 ```
 > 執行後會產生 `reservoirs.json` 檔案。
 
-### 2. 執行 VirusTotal URL 掃描 (通用方法)
+### 2. 執行 YouTube 動態爬蟲 (動態)
+模擬使用者操作瀏覽器，搜尋關鍵字並抓取資料：
+```bash
+python dynamic_web.py
+```
+> 執行後會自動開啟 Chromium 瀏覽器，搜尋 "Python" 並在終端機印出影片標題與網址。
+
+### 3. 執行 VirusTotal URL 掃描 (通用方法)
 使用 Requests 模組進行同步請求：
 ```bash
 python VirusTotal_API_test.py
 ```
 > 執行後會顯示該 URL 是否安全，並產生 `report.json` 報告。
 
-### 3. 執行 VirusTotal URL 掃描 (官方 SDK)
+### 4. 執行 VirusTotal URL 掃描 (官方 SDK)
 使用官方 SDK 進行非同步 URL 請求：
 ```bash
 python vt_sdk_test.py
 ```
 > 執行後會顯示掃描統計結果 (如 malicious, harmless 數量)。
 
-### 4. 執行 VirusTotal 檔案掃描 (官方 SDK)
+### 5. 執行 VirusTotal 檔案掃描 (官方 SDK)
 使用官方 SDK 上傳檔案並掃描：
 ```bash
 python vt_sdk_ScanFile.py
