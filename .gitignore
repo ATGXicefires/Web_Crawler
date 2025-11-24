@@ -1,0 +1,8 @@
+# Environment
+.venv/*
+.idea/*
+.env
+
+# outputs
+report.json
+reservoirs.json
