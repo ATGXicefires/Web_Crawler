@@ -3,6 +3,7 @@
 .idea/*
 .env
 project/*
+url/*
 
 # outputs
 report.json
