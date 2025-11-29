@@ -3,6 +3,7 @@
 """
 
 from dotenv import load_dotenv
+from pathlib import Path
 import os, asyncio
 import vt
 
@@ -19,11 +20,24 @@ async def scan_file(client, file_path):
     # 4. 回傳統計數據
     return completed_analysis.stats
 
+def read_file():
+    file_list = []
+    folder = Path("project")
+    for file in folder.iterdir():
+        if file.is_file() and file.suffix == ".exe":
+            if file.stat().st_size < 650 * 1024 * 1024:
+                #print(file.name)
+                file_list.append(file)
+    return file_list
+
 async def main():
     async with vt.Client(API_KEY) as client:
-        with open("geek.exe", "rb") as f: #我用geek.exe做測試
-            stats = await scan_file(client, "geek.exe")
-            print(stats)
+        file_list = read_file()
+        if file_list:
+            for file_path in file_list:
+                with open(file_path, "rb") as f:
+                    stats = await scan_file(client, file_path)
+                print(f'{file_path.name}: {stats}')
 
 if __name__ == '__main__':
     asyncio.run(main())
